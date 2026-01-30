@@ -1,0 +1,379 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Ultimate Mobile Roadmap </title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;700;900&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --bg-color: #121920;
+            --primary-blue: #3b82f6;
+            --text-main: #f8fafc;
+            --card-bg: #ffffff;
+            --node-bg: #1e293b;
+            --vertical-gap: 150px;
+            --horizontal-gap: 120px;
+        }
+
+        body {
+            font-family: 'Poppins', sans-serif;
+            background-color: var(--bg-color);
+            color: var(--text-main);
+            margin: 0;
+            padding: 0;
+            overflow-x: hidden;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 80px 20px;
+        }
+
+        header {
+            text-align: center;
+            margin-bottom: 100px;
+        }
+
+        h1 {
+            font-size: 3.5rem;
+            font-weight: 900;
+            background: linear-gradient(to right, #60a5fa, #3b82f6, #2563eb);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            margin-bottom: 15px;
+        }
+
+        .roadmap-grid {
+            display: grid;
+            grid-template-columns: 1fr 280px 1fr;
+            gap: var(--vertical-gap) var(--horizontal-gap);
+            align-items: center;
+            position: relative;
+        }
+
+        
+        .roadmap-grid::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            bottom: 0;
+            left: 50%;
+            width: 2px;
+            background: linear-gradient(to bottom, transparent, var(--primary-blue), transparent);
+            transform: translateX(-50%);
+            z-index: 0;
+            opacity: 0.2;
+        }
+
+        .main-node {
+            grid-column: 2;
+            background: var(--node-bg);
+            border: 2px solid var(--primary-blue);
+            border-radius: 16px;
+            padding: 20px;
+            text-align: center;
+            font-weight: 700;
+            font-size: 1.1rem;
+            box-shadow: 0 0 20px rgba(59, 130, 246, 0.15);
+            z-index: 10;
+            transition: all 0.3s ease;
+            position: relative;
+        }
+
+        .side-card {
+            background: var(--card-bg);
+            color: #1e293b;
+            border-radius: 16px;
+            width: 100%;
+            max-width: 320px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.3);
+            overflow: hidden;
+            z-index: 10;
+            transition: all 0.3s ease;
+            position: relative;
+            border: 1px solid rgba(255,255,255,0.1);
+        }
+
+        .side-card-header {
+            background: #1e293b;
+            color: white;
+            padding: 12px 18px;
+            font-weight: 700;
+            font-size: 0.95rem;
+            border-bottom: 3px solid var(--primary-blue);
+            text-align: center;
+        }
+
+        
+        .card-orange .side-card-header,
+        .card-purple .side-card-header,
+        .card-green .side-card-header,
+        .card-pink .side-card-header { border-bottom-color: var(--primary-blue); }
+
+        .side-card-content {
+            padding: 15px 20px;
+        }
+
+        .side-card-content li {
+            padding: 8px 0;
+            border-bottom: 1px solid #f1f5f9;
+            display: flex;
+            align-items: center;
+            font-size: 0.85rem;
+            color: #475569;
+        }
+
+        .side-card-content li::before {
+            content: '•';
+            color: var(--primary-blue);
+            margin-right: 8px;
+            font-weight: bold;
+        }
+        
+        
+        .card-orange .side-card-content li::before,
+        .card-purple .side-card-content li::before,
+        .card-green .side-card-content li::before,
+        .card-pink .side-card-content li::before { color: var(--primary-blue); }
+
+        .card-wrapper { position: relative; display: inline-block; }
+        .left-side { grid-column: 1; justify-self: end; position: relative; width: 100%; display: flex; justify-content: flex-end; align-items: center; }
+        .right-side { grid-column: 3; justify-self: start; position: relative; width: 100%; display: flex; justify-content: flex-start; align-items: center; }
+
+        /* ─── أسهم جديدة (SVG) ─── */
+        .roadmap-arrow {
+            position: absolute;
+            z-index: 5;
+            top: 50%;
+            transform: translateY(-50%);
+        }
+        .roadmap-arrow svg {
+            display: block;
+            filter: drop-shadow(0 0 6px rgba(59, 130, 246, 0.4));
+        }
+        .roadmap-arrow--to-right {
+            left: 100%;
+            width: var(--horizontal-gap);
+            height: 24px;
+        }
+        .roadmap-arrow--to-right svg {
+            width: 100%;
+            height: 100%;
+            object-fit: none;
+            object-position: 0 50%;
+        }
+        .roadmap-arrow--to-left {
+            right: 100%;
+            width: var(--horizontal-gap);
+            height: 24px;
+        }
+        .roadmap-arrow--to-left svg {
+            width: 100%;
+            height: 100%;
+            transform: scaleX(-1);
+            object-fit: none;
+            object-position: 0 50%;
+        }
+        .multi-arrow-main {
+            position: absolute;
+            top: 50%;
+            transform: translateY(-50%);
+            z-index: 5;
+            width: var(--horizontal-gap);
+            height: 24px;
+        }
+        .multi-arrow-main--right { left: 100%; }
+        .multi-arrow-main--left { right: 100%; }
+        .multi-arrow-main--left svg { transform: scaleX(-1); }
+        .multi-arrow-main svg {
+            width: 100%;
+            height: 100%;
+            filter: drop-shadow(0 0 6px rgba(59, 130, 246, 0.4));
+        }
+        .card-orange .multi-arrow-main svg,
+        .card-purple .multi-arrow-main svg,
+        .card-green .multi-arrow-main svg,
+        .card-pink .multi-arrow-main svg { --arrow-color: var(--primary-blue); }
+        .card-orange, .card-purple, .card-green, .card-pink { position: relative; }
+
+        .multi-card {
+            display: flex;
+            flex-direction: column;
+            gap: 40px;
+            position: relative;
+            width: 100%;
+        }
+
+        footer {
+            text-align: center;
+            padding: 60px 0;
+            border-top: 1px solid rgba(255,255,255,0.05);
+            margin-top: 80px;
+            color: #64748b;
+        }
+
+        @media (max-width: 1100px) {
+            .roadmap-grid { grid-template-columns: 1fr; gap: 50px; }
+            .roadmap-grid::before { left: 20px; transform: none; }
+            .main-node, .left-side, .right-side { grid-column: 1; justify-self: stretch; margin-left: 50px; }
+            .side-card { max-width: 100%; }
+            .roadmap-arrow, .multi-arrow-main { display: none !important; }
+        }
+    </style>
+</head>
+<body>
+
+    <div class="container">
+        <header>
+            <span class="bg-blue-900/40 text-blue-400 px-4 py-1.5 rounded-full text-xs font-bold tracking-widest uppercase mb-4 inline-block border border-blue-500/20">2026 Developer Path</span>
+            <h1>Mobile App Development</h1>
+           
+        </header>
+
+        <div class="roadmap-grid">
+            
+            
+            <div class="left-side">
+                <div class="card-wrapper">
+                    <div class="roadmap-arrow roadmap-arrow--to-right" aria-hidden="true">
+                        <svg viewBox="0 0 120 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                            <path d="M0 12 L96 12" stroke="var(--primary-blue, #3b82f6)" stroke-width="2.5" stroke-linecap="round"/>
+                            <path d="M88 6 L100 12 L88 18 Z" fill="var(--primary-blue, #3b82f6)"/>
+                        </svg>
+                    </div>
+                    <div class="side-card">
+                        <div class="side-card-header">Networks</div>
+                        <div class="side-card-content">
+                            <ul>
+                                <li>HTTP / HTTPS Protocols</li>
+                                <li>DNS & Domains</li>
+                                <li>RESTful APIs</li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="main-node">Fundamentals</div>
+            <div></div>
+
+            
+            <div></div>
+            <div class="main-node">Core Web</div>
+            <div class="right-side">
+                <div class="card-wrapper">
+                    <div class="roadmap-arrow roadmap-arrow--to-left" aria-hidden="true">
+                        <svg viewBox="0 0 120 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                            <path d="M0 12 L96 12" stroke="var(--primary-blue, #3b82f6)" stroke-width="2.5" stroke-linecap="round"/>
+                            <path d="M88 6 L100 12 L88 18 Z" fill="var(--primary-blue, #3b82f6)"/>
+                        </svg>
+                    </div>
+                    <div class="side-card">
+                        <div class="side-card-header">Basic Programming</div>
+                        <div class="side-card-content">
+                            <ul>
+                                <li>Variables & Data Types</li>
+                                <li>Functions & Scopes</li>
+                                <li>OOP Concepts</li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            
+            <div class="left-side">
+                <div class="multi-card">
+                    <div class="card-orange">
+                        <div class="side-card">
+                            <div class="side-card-header">CSS Styling</div>
+                            <div class="side-card-content">
+                                <ul><li>Flexbox & Grid</li><li>Animations</li></ul>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="card-purple">
+                        <div class="side-card">
+                            <div class="side-card-header">Mobile UI/UX</div>
+                            <div class="side-card-content">
+                                <ul><li>Material Design</li><li>Touch Interactions</li></ul>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="multi-arrow-main multi-arrow-main--right" aria-hidden="true">
+                        <svg viewBox="0 0 120 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                            <path d="M0 12 L96 12" stroke="var(--primary-blue, #3b82f6)" stroke-width="2.5" stroke-linecap="round"/>
+                            <path d="M88 6 L100 12 L88 18 Z" fill="var(--primary-blue, #3b82f6)"/>
+                        </svg>
+                    </div>
+                </div>
+            </div>
+            <div class="main-node">Design & UI</div>
+            <div></div>
+
+            
+            <div></div>
+            <div class="main-node">Logic & Platforms</div>
+            <div class="right-side">
+                <div class="multi-card">
+                    <div class="card-green">
+                        <div class="side-card">
+                            <div class="side-card-header">Android (Kotlin)</div>
+                            <div class="side-card-content">
+                                <ul><li>Jetpack Compose</li><li>Android Studio</li></ul>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="card-pink">
+                        <div class="side-card">
+                            <div class="side-card-header">iOS (Swift)</div>
+                            <div class="side-card-content">
+                                <ul><li>SwiftUI Framework</li><li>Xcode Environment</li></ul>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="multi-arrow-main multi-arrow-main--left" aria-hidden="true">
+                        <svg viewBox="0 0 120 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                            <path d="M0 12 L96 12" stroke="var(--primary-blue, #3b82f6)" stroke-width="2.5" stroke-linecap="round"/>
+                            <path d="M88 6 L100 12 L88 18 Z" fill="var(--primary-blue, #3b82f6)"/>
+                        </svg>
+                    </div>
+                </div>
+            </div>
+
+            
+            <div class="left-side">
+                <div class="card-wrapper">
+                    <div class="roadmap-arrow roadmap-arrow--to-right" aria-hidden="true">
+                        <svg viewBox="0 0 120 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                            <path d="M0 12 L96 12" stroke="var(--primary-blue, #3b82f6)" stroke-width="2.5" stroke-linecap="round"/>
+                            <path d="M88 6 L100 12 L88 18 Z" fill="var(--primary-blue, #3b82f6)"/>
+                        </svg>
+                    </div>
+                    <div class="side-card">
+                        <div class="side-card-header">Cross-Platform</div>
+                        <div class="side-card-content">
+                            <ul>
+                                <li>React Native</li>
+                                <li>Flutter (Dart)</li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="main-node">Native & Hybrid</div>
+            <div></div>
+
+        </div>
+
+       
+    </div>
+
+</body>
+</html>
